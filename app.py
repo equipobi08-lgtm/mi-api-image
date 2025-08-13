@@ -4,6 +4,8 @@ import time
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
@@ -24,7 +26,9 @@ def capturar_pagina():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')  # Evita errores de memoria compartida en contenedores
 
-    driver = webdriver.Chrome(options=options)
+    # Aquí usamos webdriver-manager para manejar el chromedriver
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
     driver.get(url)
     time.sleep(5)
 
@@ -38,4 +42,5 @@ def capturar_pagina():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
