@@ -1,0 +1,9 @@
+# Crear el archivo .gitignore con el contenido necesario
+@"
+venv/
+*.pyc
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+"@ | Out-File -FilePath .gitignore -Encoding UTF8
