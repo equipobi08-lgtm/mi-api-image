@@ -7,6 +7,10 @@ from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return 'Bienvenido a la API de captura de pantalla'
+
 @app.route('/captura', methods=['GET'])
 def capturar_pagina():
     url = request.args.get('url')
@@ -34,3 +38,4 @@ def capturar_pagina():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
