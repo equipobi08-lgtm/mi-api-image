@@ -1,14 +1,10 @@
 from flask import Flask, request, jsonify
-import base64, time, os
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+import base64, time, os
 
 app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return 'Bienvenido a la API de captura de pantalla'
 
 @app.route('/captura', methods=['GET'])
 def capturar_pagina():
@@ -16,20 +12,17 @@ def capturar_pagina():
     if not url:
         return jsonify({"error": "Parámetro 'url' es obligatorio"}), 400
 
-    chrome_path = "/opt/render/project/.render/chrome/opt/google/chrome/google-chrome"
-    chromedriver_path = "/opt/render/project/.render/chromedriver/chromedriver"
-
-    options = Options()
-    options.binary_location = chrome_path
+    options = webdriver.ChromeOptions()
     options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
+    options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
 
-    service = Service(executable_path=chromedriver_path)
+    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(url)
     time.sleep(5)
+
     screenshot = driver.get_screenshot_as_png()
     driver.quit()
 
